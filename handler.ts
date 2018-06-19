@@ -1,13 +1,21 @@
 import { APIGatewayEvent, Callback, Context, Handler } from 'aws-lambda';
+import * as serverless from 'aws-serverless-express';
+import * as express from 'express';
 
-export const hello: Handler = (event: APIGatewayEvent, context: Context, cb: Callback) => {
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless Webpack (Typescript) v1.0! Your function executed successfully!',
-      input: event,
-    }, null, 2),
-  };
+// Init express and routes
+const app = express();
 
-  cb(null, response);
-}
+app.get('/', (req: express.Request, res: express.Response) => {
+  res.send('this is the root level');
+});
+
+app.get('/hello', (req: express.Request, res: express.Response) =>  {
+  res.send('hello world');
+});
+
+// serverless express
+const server = serverless.createServer(app);
+
+// lambda handler
+export const hello: Handler = (event: APIGatewayEvent, context: Context) =>
+  serverless.proxy(server, event, context)

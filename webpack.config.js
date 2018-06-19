@@ -9,6 +9,7 @@ Object.keys(slsw.lib.entries).forEach(key => (
 
 module.exports = {
   entry: entries,
+  mode: 'none',
   devtool: 'source-map',
   resolve: {
     extensions: [
